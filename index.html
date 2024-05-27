@@ -1,31 +1,81 @@
-
 <!DOCTYPE html>
 <html>
 
+<head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+  .container {
+      padding: 20px;
+      margin: 20px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    #currentTime {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+  </style>
+</head>
+
 <body>
- <div class="loader"></div> 
-.loader {
-  display: inline-flex;
-  gap: 10px;
-}
-.loader:before,
-.loader:after {
-  content: "";
-  height: 20px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background:
-    linear-gradient(#222 0 0) top/100% 40% no-repeat,
-    radial-gradient(farthest-side,#000 95%,#0000) 50%/8px 8px no-repeat
-    #fff;
-  animation: l7 1.5s infinite alternate ease-in;
-}
-@keyframes l7 {
-  0%,
-  70% {background-size:100% 40%,8px 8px}
-  85% {background-size:100% 120%,8px 8px}
-  100% {background-size:100% 40%,8px 8px}
-}
+  <div class="container">
+    <h1>ttwa.cloud</h1>
+    <p >跳跳蛙</p>
+    <p>主角独自徘徊在这冷清的地方，心中充满了迷茫与困惑。</p>
+    <p>突然，一道神秘的光芒闪现……</p>
+    <p id="flashText">.</p>
+  </div>
+  <div id="currentTime"></div>
+  <script>
+    let colorChangeInterval;
+
+    function startColorChange() {
+      colorChangeInterval = setInterval(() => {
+        let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+        document.getElementById('flashText').style.color = randomColor;
+      }, 200);
+    }
+
+    startColorChange();
+
+    let timePageInterval;
+
+    function timePageEffect() {
+      timePageInterval = setInterval(() => {
+        let currentOpacity = document.getElementById('currentTime').style.opacity;
+        if (currentOpacity > 0) {
+          document.getElementById('currentTime').style.opacity -= 0.1;
+        } else {
+          const date = new Date();
+          const timeString = date.toLocaleTimeString();
+          document.getElementById('currentTime').innerHTML = timeString;
+          document.getElementById('currentTime').style.opacity = 1;
+        }
+      }, 500);
+    }
+
+    timePageEffect();
+  </script>
 </body>
 
 </html>
