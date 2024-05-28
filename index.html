@@ -27,10 +27,14 @@
       margin-bottom: 10px;
     }
 
+    #flashText {
+      opacity: 0;
+    }
+
     #currentTime {
       position: absolute;
-      bottom: 10px;
-      left: 10px;
+      right: 10px;
+      top: 10px;
       opacity: 1;
       transition: opacity 1s ease-in-out;
     }
@@ -40,13 +44,25 @@
 <body>
   <div class="container">
     <h1>ttwa.cloud</h1>
-    <p >跳跳蛙</p>
+    <p>跳跳蛙，有梦想的青蛙</p>
     <p>主角独自徘徊在这冷清的地方，心中充满了迷茫与困惑。</p>
     <p>突然，一道神秘的光芒闪现……</p>
-    <p id="flashText">.</p>
+    <p id="flashText">~</p>
   </div>
   <div id="currentTime"></div>
   <script>
+    let textIndex = 0;
+
+    function showText() {
+      if (textIndex < document.querySelectorAll('p').length) {
+        document.querySelectorAll('p')[textIndex].style.opacity = 1;
+        textIndex++;
+        setTimeout(showText, 200);
+      }
+    }
+
+    showText();
+
     let colorChangeInterval;
 
     function startColorChange() {
