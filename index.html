@@ -3,94 +3,89 @@
 
 <head>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      background-color: black;
-      color: white;
-      margin: 0;
-      padding: 0;
+      background-image: url("https://img.picui.cn/free/2024/06/26/667bff5dcea79.jpg");
+      background-repeat: no-repeat;
     }
 
-  .container {
-      padding: 20px;
-      margin: 20px;
+    /* 电脑端（大屏幕） */
+    @media (min-width: 768px) {
+      body {
+        background-size: cover;
+      }
     }
 
-    h1 {
-      margin: 0;
+    /* 手机端（小屏幕） */
+    @media (max-width: 767px) {
+      body {
+        background-size: contain;
+      }
     }
 
-    p {
-      margin-bottom: 10px;
+ .container {
+      width: 90%;
+      margin: 50px auto;
+      height: 50vh;
+      background-color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      position: relative;
     }
 
-    #flashText {
-      opacity: 0;
+ .left-box {
+      width: 25%;
+      height: 100%;
+      position: relative;
     }
 
-    #currentTime {
+ .left-box img {
       position: absolute;
-      right: 10px;
-      top: 10px;
-      opacity: 1;
-      transition: opacity 1s ease-in-out;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+ .right-box {
+      width: 75%;
+      padding: 20px;
+      position: relative;
+    }
+
+ .time {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>ttwa.cloud</h1>
-    <p>跳跳蛙，有梦想的青蛙</p>
-    <p>主角独自徘徊在这冷清的地方，心中充满了迷茫与困惑。</p>
-    <p>突然，一道神秘的光芒闪现……</p>
-    <p id="flashText">~</p>
+    <div class="left-box">
+      <img src="https://img.picui.cn/free/2024/06/26/667bffd142089.jpg" alt="Image">
+    </div>
+    <div class="right-box">
+      <h1>ttwa.cloud</h1>
+      <p>这里是风铃的个人博客</p>
+      <div class="time"></div>
+    </div>
   </div>
-  <div id="currentTime"></div>
+
   <script>
-    let textIndex = 0;
-
-    function showText() {
-      if (textIndex < document.querySelectorAll('p').length) {
-        document.querySelectorAll('p')[textIndex].style.opacity = 1;
-        textIndex++;
-        setTimeout(showText, 200);
-      }
+    function updateTime() {
+      const timeDiv = document.querySelector('.time');
+      const now = new Date();
+      const timeString = now.toLocaleString();
+      timeDiv.innerHTML = timeString;
     }
 
-    showText();
-
-    let colorChangeInterval;
-
-    function startColorChange() {
-      colorChangeInterval = setInterval(() => {
-        let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-        document.getElementById('flashText').style.color = randomColor;
-      }, 200);
-    }
-
-    startColorChange();
-
-    let timePageInterval;
-
-    function timePageEffect() {
-      timePageInterval = setInterval(() => {
-        let currentOpacity = document.getElementById('currentTime').style.opacity;
-        if (currentOpacity > 0) {
-          document.getElementById('currentTime').style.opacity -= 0.1;
-        } else {
-          const date = new Date();
-          const timeString = date.toLocaleTimeString();
-          document.getElementById('currentTime').innerHTML = timeString;
-          document.getElementById('currentTime').style.opacity = 1;
-        }
-      }, 500);
-    }
-
-    timePageEffect();
+    setInterval(updateTime, 1000);
   </script>
 </body>
 
