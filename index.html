@@ -2,11 +2,45 @@
 <html lang="en">
 
 <head>
-  <Hello World>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取内容并复制到粘贴板</title>
+  <style>
+    /* 这里可以添加你想要的CSS样式 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+  </style>
 </head>
 
 <body>
-
+  <button onclick="fetchAndCopy()">获取并复制内容</button>
+  <script>
+    async function fetchAndCopy() {
+      try {
+        const response = await fetch('http://127.0.0.1:8412/asd/dfgh/?type=1&qq=1330166564');
+        if (!response.ok) {
+          throw new Error('网络请求失败');
+        }
+        const data = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'text/html');
+        const bodyContent = doc.body.innerHTML;
+        // 创建一个临时元素用于复制内容
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = bodyContent;
+        document.body.appendChild(tempTextarea);
+        tempTextarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextarea);
+        alert('内容已复制到粘贴板');
+      } catch (error) {
+        console.error('出现错误:', error);
+        alert('操作出现错误，请检查控制台查看详情');
+      }
+    }
+  </script>
 </body>
 
 </html>
