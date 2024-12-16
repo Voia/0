@@ -2,45 +2,15 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>获取内容并复制到粘贴板</title>
-  <style>
-    /* 这里可以添加你想要的CSS样式 */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端QQ聊天窗口示例</title>
 </head>
 
 <body>
-  <button onclick="fetchAndCopy()">获取并复制内容</button>
-  <script>
-    async function fetchAndCopy() {
-      try {
-        const response = await fetch('http://1.94.208.142:8412/asd/dfgh/?type=1&qq=1330166564');
-        if (!response.ok) {
-          throw new Error('网络请求失败');
-        }
-        const data = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-        const bodyContent = doc.body.innerHTML;
-        // 创建一个临时元素用于复制内容
-        const tempTextarea = document.createElement('textarea');
-        tempTextarea.value = bodyContent;
-        document.body.appendChild(tempTextarea);
-        tempTextarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(tempTextarea);
-        alert('内容已复制到粘贴板');
-      } catch (error) {
-        console.error('出现错误:', error);
-        alert('操作出现错误，请检查控制台查看详情');
-      }
-    }
-  </script>
+    <h1>在手机上点击下面链接尝试打开QQ聊天窗口</h1>
+    <!-- 将下面的123456789替换成你想要聊天对象的真实QQ号码 -->
+    <a href="mqq://im/chat?chat_type=wpa&uin=5408547&version=1&src_type=web">点击与对方聊天（移动端）</a>
 </body>
 
 </html>
