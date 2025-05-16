@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片混合工具</title>
     <style>
+        /* 新增自定义按钮样式 */
+        .custom-upload-btn {
+            background-color: #6c757d; /* 深灰背景 */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .custom-upload-btn:hover {
+            background-color: #5a6268; /* 悬停深灰 */
+        }
+
+        /* 原有样式保留，以下为原代码样式 */
         body {
             font-family: 'Microsoft YaHei', sans-serif;
             display: flex;
@@ -148,9 +165,12 @@
             <p>• 联系方式QQ：<strong>5408547（加不上请进交流群）</strong></p>
         </div>
 
+        <!-- 替换为自定义按钮 -->
         <input type="file" id="image-upload" multiple accept="image/*">
-        <button class="upload-btn" onclick="document.getElementById('image-upload').click()">选择图片</button>
-        <button class="upload-btn" onclick="previewImages()">上传图片</button>
+        <label for="image-upload" class="custom-upload-btn">
+            选择图片 📁
+        </label>
+        
         <div id="image-preview"></div>
         
         <div class="controls">
@@ -189,12 +209,16 @@
             opacityValue.textContent = `${opacitySlider.value}%`;
         });
 
+        // 选择文件后自动预览
+        uploadInput.addEventListener('change', function() {
+            previewImages();
+        });
+
         function previewImages() {
             previewContainer.innerHTML = '';
             images = [];
             
             if (!uploadInput.files || uploadInput.files.length === 0) {
-                alert('请先选择图片');
                 return;
             }
             
@@ -217,7 +241,7 @@
 
         function mergeImages() {
             if (images.length === 0) {
-                alert('请先上传图片');
+                alert('请先选择图片');
                 return;
             }
 
