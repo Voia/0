@@ -21,6 +21,77 @@
             background-color: #5a6268; /* 悬停深灰 */
         }
 
+        /* 打赏按钮样式 */
+        .donate-btn {
+            background-color: #ff9800;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px 0;
+        }
+
+        .donate-btn:hover {
+            background-color: #f57c00;
+        }
+
+        /* 打赏弹窗样式 */
+        .donate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .donate-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .donate-content h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .donate-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .donate-qrcode {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .close-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #5a6268;
+        }
+
         /* 原有样式保留，以下为原代码样式 */
         body {
             font-family: 'Microsoft YaHei', sans-serif;
@@ -191,9 +262,20 @@
         <button class="upload-btn" onclick="invertColors()">反差色效果</button>
         <button class="upload-btn" onclick="downloadImage()">保存图片</button>
         <button class="upload-btn" onclick="joinChatGroup()">加入聊天群</button>
+        <button class="donate-btn" onclick="showDonateModal()">打赏作者</button>
     </div>
 
     <div id="canvas-container"></div>
+
+    <!-- 打赏弹窗 -->
+    <div id="donate-modal" class="donate-modal">
+        <div class="donate-content">
+            <h3>AAA！爱你宝子！！</h3>
+            <p>宝子打赏后留言QQ，我给你看拼好的老鼠</p>
+            <img src="https://pic1.imgdb.cn/item/6827713158cb8da5c8f77ca4.png" alt="打赏二维码" class="donate-qrcode">
+            <button class="close-btn" onclick="hideDonateModal()">关闭</button>
+        </div>
+    </div>
 
     <script>
         const uploadInput = document.getElementById('image-upload');
@@ -202,6 +284,7 @@
         const blendModeSelect = document.getElementById('blend-mode');
         const opacitySlider = document.getElementById('opacity');
         const opacityValue = document.getElementById('opacity-value');
+        const donateModal = document.getElementById('donate-modal');
         let images = [];
         let originalCanvasData = null;
 
@@ -323,6 +406,21 @@
         function joinChatGroup() {
             window.open('https://qm.qq.com/q/b7TvOpxhuM', '_blank');
         }
+
+        function showDonateModal() {
+            donateModal.style.display = 'flex';
+        }
+
+        function hideDonateModal() {
+            donateModal.style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        donateModal.addEventListener('click', function(e) {
+            if (e.target === donateModal) {
+                hideDonateModal();
+            }
+        });
     </script>
 </body>
 </html>
