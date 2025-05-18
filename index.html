@@ -67,9 +67,8 @@
             background-color: rgba(76, 175, 80, 0.05);
         }
         
-        .upload-area i {
+        .upload-area .emoji {
             font-size: 36px;
-            color: var(--primary-color);
             margin-bottom: 8px;
         }
         
@@ -221,15 +220,14 @@
             cursor: pointer;
         }
     </style>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>拼好图</h1>
-        <p class="description">上传图片一键拼成!</p>
+        <p class="description">上传图片，一键拼成！</p>
         
         <div class="upload-area" id="upload-area">
-            <i class="material-icons">cloud_upload</i>
+            <div class="emoji">📤</div>
             <p>点击或拖拽图片到此处上传</p>
             <p><small>支持PNG、JPG、JPEG格式</small></p>
             <input type="file" id="file-input" accept="image/*" multiple>
@@ -241,19 +239,19 @@
         
         <div class="controls">
             <button id="group-btn" class="btn-secondary">
-                <i class="material-icons">group</i>交流群
+                👥 交流群
             </button>
             <button id="donate-btn" class="btn-primary">
-                <i class="material-icons">favorite</i>查看老鼠合集
+                🐀 查看老鼠合集
             </button>
             <button id="clear-btn">
-                <i class="material-icons">delete</i>清空
+                🗑️ 清空
             </button>
             <button id="invert-btn" disabled>
-                <i class="material-icons">invert_colors</i>反差色
+                🔄 反差色
             </button>
             <button id="download-btn" class="btn-primary" disabled>
-                <i class="material-icons">download</i>下载
+                ⬇️ 下载
             </button>
         </div>
         
@@ -271,7 +269,7 @@
     <div class="donate-modal" id="donate-modal">
         <div class="donate-content">
             <span class="donate-close" id="donate-close">&times;</span>
-            <h3>AAA!爱你宝子</h3>
+            <h3>❤️爱你宝子！</h3>
             <p>留言QQ加入交流群，主动联系你</p>
             <img src="https://pic1.imgdb.cn/item/682885d258cb8da5c8f92fa6.jpg" alt="打赏二维码">
         </div>
@@ -484,7 +482,7 @@
             invertBtn.disabled = true;
             downloadBtn.disabled = true;
             isInverted = false;
-            invertBtn.innerHTML = '<i class="material-icons">invert_colors</i>反差色';
+            invertBtn.textContent = '🔄 反差色';
             showStatus('已清空所有图片');
         }
         
@@ -576,9 +574,7 @@
                 isInverted = !isInverted;
                 applyInvertEffect();
                 
-                invertBtn.innerHTML = `<i class="material-icons">invert_colors</i>${
-                    isInverted ? '恢复' : '反差色'
-                }`;
+                invertBtn.textContent = isInverted ? '🔄 恢复' : '🔄 反差色';
                 
                 hideLoading();
                 showStatus(isInverted ? '已添加反差色' : '已恢复原色', 'success');
