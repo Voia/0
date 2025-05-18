@@ -2,622 +2,247 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>拼好图</title>
+    <!-- 新增图标链接 -->
+    <link rel="icon" href="http://cdnjson.com/images/2025/05/17/1000009028.png" type="image/png">
     <style>
-        :root {
-            --primary-color: #4CAF50;
-            --primary-hover: #45a049;
-            --secondary-color: #2196F3;
-            --secondary-hover: #0b7dda;
-            --text-color: #333;
-            --light-gray: #f5f5f5;
-            --border-color: #ddd;
-        }
-        
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+            list-style: none;
+            text-decoration: none;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #e8f4f8, #f0fafa);
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f9f9f9;
-            padding: 15px;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        h1 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .description {
-            font-size: 0.9rem;
-            color: #666;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .upload-area {
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(76, 175, 80, 0.05);
-        }
-        
-        .upload-area .emoji {
-            font-size: 36px;
-            margin-bottom: 8px;
-        }
-        
-        .upload-area p {
-            margin: 5px 0;
-            font-size: 0.95rem;
-        }
-        
-        #file-input {
-            display: none;
-        }
-        
-        .preview-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .preview-image {
-            width: 100%;
-            height: 80px;
-            object-fit: contain;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-        }
-        
-        .controls {
+            min-height: 100vh;
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0;
-        }
-        
-        button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            flex: 1;
-            min-width: 100px;
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            overflow: hidden;
         }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--secondary-hover);
-        }
-        
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .result-section {
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        #result-image {
-            max-width: 100%;
-            max-height: 300px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-        }
-        
-        .loading {
-            display: none;
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .spinner {
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border-left-color: var(--primary-color);
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .status {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 6px;
-            background-color: var(--light-gray);
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        
-        .donate-modal {
-            display: none;
+
+        /* 背景动效 */
+        .bg-particles {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        
-        .donate-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 300px;
-        }
-        
-        .donate-content img {
-            max-width: 100%;
-            margin-top: 15px;
-            border-radius: 6px;
-        }
-        
-        .donate-close {
+
+        .particle {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 20px;
+            width: 8px;
+            height: 8px;
+            background: #87ceeb;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: float 8s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        /* 主容器 */
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.2);
+            margin: 1rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 标题 */
+        .title {
+            font-size: 2.5rem;
+            color: #1e90ff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(30, 144, 255, 0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* 导航按钮 */
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            margin: 0.5rem;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 1rem;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(30, 144, 255, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(30, 144, 255, 0.3);
+        }
+
+        .nav-btn i {
+            font-size: 1.25rem;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .modal-title {
+            color: #1e90ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-message {
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            background: #1e90ff;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            background: #187bcd;
+        }
+
+        /* 图标样式（使用Font Awesome，需联网加载） */
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css");
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .title { font-size: 2rem; }
+            .nav-btn { padding: 1rem 1.5rem; }
+            .modal-content {
+                margin: 25% auto;
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>拼好图</h1>
-        <p class="description">请上传下载的图片，或干净的截图！</p>
-        
-        <div class="upload-area" id="upload-area">
-            <div class="emoji">📤</div>
-            <p>点击或拖拽图片到此处上传</p>
-            <p><small>支持PNG、JPG、JPEG格式</small></p>
-            <input type="file" id="file-input" accept="image/*" multiple>
-        </div>
-        
-        <div class="preview-container" id="preview-container"></div>
-        
-        <div class="status" id="status">等待上传图片...</div>
-        
-        <div class="controls">
-            <button id="group-btn" class="btn-secondary">
-                👥 交流群
-            </button>
-            <button id="donate-btn" class="btn-primary">
-                🐀 查看老鼠合集
-            </button>
-            <button id="clear-btn">
-                🗑️ 清空
-            </button>
-            <button id="invert-btn" disabled>
-                🔄 反差色
-            </button>
-            <button id="download-btn" class="btn-primary" disabled>
-                ⬇️ 下载
-            </button>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>正在处理图片...</p>
-        </div>
-        
-        <div class="result-section" id="result-section">
-            <img id="result-image">
+    <!-- 域名变更弹窗 -->
+    <div id="domainModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title"><i class="fas fa-exclamation-circle"></i> 重要通知</h3>
+            <p class="modal-message">
+                我们已更换地址为：caning.cc<br>
+                新地址无此弹窗！<br>
+                感谢您一直以来的支持！
+            </p>
+            <button class="modal-btn" onclick="closeModal()">知道了</button>
         </div>
     </div>
 
-    <!-- 打赏弹窗 -->
-    <div class="donate-modal" id="donate-modal">
-        <div class="donate-content">
-            <span class="donate-close" id="donate-close">&times;</span>
-            <h3>❤️爱你宝子！</h3>
-            <p>留言QQ加入交流群，主动联系你</p>
-            <img src="https://pic1.imgdb.cn/item/682972f358cb8da5c8fa3b5f.jpg" alt="打赏二维码">
-        </div>
+    <div class="bg-particles">
+        <div class="particle" style="left: 10%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 6s;"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">🌻 像素拼图工坊</h1>
+        <p class="subtitle">简单有趣的像素拼图工具</p>
+
+        <!-- 拼图生成 -->
+        <a href="http://pintu.caning.cc" class="nav-btn" target="_blank">
+            <i class="fas fa-cut"></i> 创作拼图
+        </a>
+
+        <!-- 拼图合成 -->
+        <a href="http://jietu.caning.cc" class="nav-btn" target="_blank">
+            <i class="fas fa-image"></i> 拼图查看
+        </a>
+
+        <!-- 加入交流群 -->
+        <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=akT5EiIZZ_wCgZ4LpNSyi43_DLncnf73&authKey=2hjzW%2Brx4FfBSwu6EErMPyBuzDfsmzuTtl0CjloV0eSLVEyGkLFHbrt7C2bHrqoB&noverify=0&group_code=4995900407OitFq9XZFhaxt%2FTc9LeSGDwL&noverify=0&group_code=522930859" class="nav-btn" target="_blank">
+            <i class="fas fa-users"></i> 加入交流群
+        </a>
     </div>
 
     <script>
-        // 获取DOM元素
-        const fileInput = document.getElementById('file-input');
-        const uploadArea = document.getElementById('upload-area');
-        const previewContainer = document.getElementById('preview-container');
-        const clearBtn = document.getElementById('clear-btn');
-        const invertBtn = document.getElementById('invert-btn');
-        const downloadBtn = document.getElementById('download-btn');
-        const donateBtn = document.getElementById('donate-btn');
-        const groupBtn = document.getElementById('group-btn');
-        const resultSection = document.getElementById('result-section');
-        const resultImage = document.getElementById('result-image');
-        const loading = document.getElementById('loading');
-        const statusEl = document.getElementById('status');
-        const donateModal = document.getElementById('donate-modal');
-        const donateClose = document.getElementById('donate-close');
-        
-        // 全局变量
-        let images = [];
-        let canvas = document.createElement('canvas');
-        let ctx = canvas.getContext('2d');
-        let isInverted = false;
-        
-        // 初始化
-        function init() {
-            // 修复上传点击问题 - 确保点击事件能冒泡到文件输入
-            uploadArea.addEventListener('click', (e) => {
-                // 确保点击的不是文件输入本身
-                if (e.target !== fileInput) {
-                    fileInput.click();
-                }
-            });
-            
-            // 拖拽上传相关事件
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = 'var(--primary-color)';
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = 'var(--border-color)';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = 'var(--border-color)';
-                
-                if (e.dataTransfer.files.length > 0) {
-                    handleFiles(e.dataTransfer.files);
-                }
-            });
-            
-            // 文件选择处理
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files.length > 0) {
-                    handleFiles(fileInput.files);
-                }
-            });
-            
-            // 清空图片
-            clearBtn.addEventListener('click', clearAll);
-            
-            // 添加反差色
-            invertBtn.addEventListener('click', toggleInvertColors);
-            
-            // 下载结果
-            downloadBtn.addEventListener('click', downloadResult);
-            
-            // 打赏功能
-            donateBtn.addEventListener('click', () => {
-                donateModal.style.display = 'flex';
-            });
-            
-            donateClose.addEventListener('click', () => {
-                donateModal.style.display = 'none';
-            });
-            
-            // 点击模态框外部关闭
-            donateModal.addEventListener('click', (e) => {
-                if (e.target === donateModal) {
-                    donateModal.style.display = 'none';
-                }
-            });
-            
-            // 加入交流群
-            groupBtn.addEventListener('click', () => {
-                window.open('http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=QDUvwFlboUPCtt6mu54bM-NAFRIm4vhM&authKey=qVxlrYBQHI2xwFshIGF2%2BMRPvW5%2Bn0QFgJTjqygSHIk2xFH%2FAg%2BR%2Fbs0MVmn6qvw&noverify=0&group_code=499', '_blank');
-            });
+        // 页面加载完成后显示弹窗
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('domainModal').style.display = 'block';
+            }, 500); // 延迟500毫秒显示，让页面先加载完成
+        };
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('domainModal').style.display = 'none';
         }
-        
-        // 自动检测背景颜色 (true为白底，false为黑底)
-        function detectBackgroundColor(imgData) {
-            const data = imgData.data;
-            let whitePixels = 0;
-            let blackPixels = 0;
-            let totalPixels = 0;
-            
-            // 采样边缘像素来判断背景色
-            const sampleStep = 5;
-            const edgeWidth = Math.max(10, Math.floor(imgData.width * 0.05));
-            
-            for (let y = 0; y < imgData.height; y += sampleStep) {
-                for (let x = 0; x < imgData.width; x += sampleStep) {
-                    if (x > edgeWidth && x < imgData.width - edgeWidth && 
-                        y > edgeWidth && y < imgData.height - edgeWidth) {
-                        continue;
-                    }
-                    
-                    const i = (y * imgData.width + x) * 4;
-                    const r = data[i];
-                    const g = data[i + 1];
-                    const b = data[i + 2];
-                    
-                    const brightness = (r + g + b) / 3;
-                    if (brightness > 200) whitePixels++;
-                    if (brightness < 50) blackPixels++;
-                    totalPixels++;
-                }
-            }
-            
-            if (whitePixels / totalPixels > 0.6) return true;
-            if (blackPixels / totalPixels > 0.6) return false;
-            return true;
-        }
-        
-        // 处理上传的文件
-        function handleFiles(files) {
-            const validFiles = Array.from(files).filter(file => 
-                file.type.match('image.*')
-            );
-            
-            if (validFiles.length === 0) {
-                showStatus('请上传有效的图片文件', 'error');
-                return;
-            }
-            
-            showLoading(`正在加载 ${validFiles.length} 张图片...`);
-            
-            const loadPromises = validFiles.map(file => {
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => resolve(img);
-                        img.onerror = () => resolve(null);
-                        img.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-            
-            Promise.all(loadPromises).then(loadedImages => {
-                images = loadedImages.filter(img => img !== null);
-                
-                if (images.length === 0) {
-                    showStatus('所有图片加载失败', 'error');
-                    return;
-                }
-                
-                updatePreview();
-                showStatus(`已加载 ${images.length} 张图片，正在处理...`);
+
+        // 点击按钮时添加轻微震动动效
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.style.animation = 'bounce 0.3s ease';
                 setTimeout(() => {
-                    combineImages();
-                    // 如果之前已经开启了反差色效果，则自动应用
-                    if (isInverted) {
-                        applyInvertEffect();
-                    }
-                }, 100);
+                    btn.style.animation = '';
+                }, 300);
             });
+        });
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
-        
-        // 应用反差色效果
-        function applyInvertEffect() {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                if (data[i + 3] === 0) continue;
-                data[i] = 255 - data[i];
-                data[i + 1] = 255 - data[i + 1];
-                data[i + 2] = 255 - data[i + 2];
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-            resultImage.src = canvas.toDataURL('image/png');
-        }
-        
-        // 更新预览
-        function updatePreview() {
-            previewContainer.innerHTML = '';
-            images.forEach((img, index) => {
-                const preview = document.createElement('img');
-                preview.src = img.src;
-                preview.className = 'preview-image';
-                preview.alt = `图片 ${index + 1}`;
-                previewContainer.appendChild(preview);
-            });
-        }
-        
-        // 清空所有
-        function clearAll() {
-            images = [];
-            previewContainer.innerHTML = '';
-            resultSection.style.display = 'none';
-            invertBtn.disabled = true;
-            downloadBtn.disabled = true;
-            isInverted = false;
-            invertBtn.textContent = '🔄 反差色';
-            showStatus('已清空所有图片');
-        }
-        
-        // 叠加图片
-        function combineImages() {
-            if (images.length === 0) return;
-            
-            showLoading(`正在处理 ${images.length} 张图片...`);
-            
-            setTimeout(() => {
-                canvas.width = images[0].width;
-                canvas.height = images[0].height;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(images[0], 0, 0);
-                
-                for (let i = 1; i < images.length; i++) {
-                    const img = images[i];
-                    
-                    if (img.width !== canvas.width || img.height !== canvas.height) {
-                        showStatus(`错误: 图片 ${i + 1} 尺寸不一致`, 'error');
-                        hideLoading();
-                        return;
-                    }
-                    
-                    const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = img.width;
-                    tempCanvas.height = img.height;
-                    const tempCtx = tempCanvas.getContext('2d');
-                    tempCtx.drawImage(img, 0, 0);
-                    
-                    const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-                    const data = imageData.data;
-                    
-                    const isWhiteBackground = detectBackgroundColor(imageData);
-                    showStatus(`处理中 ${i + 1}/${images.length} (${isWhiteBackground ? '白底' : '黑底'})`);
-                    
-                    for (let j = 0; j < data.length; j += 4) {
-                        const r = data[j];
-                        const g = data[j + 1];
-                        const b = data[j + 2];
-                        
-                        let isBackground = false;
-                        
-                        if (isWhiteBackground) {
-                            const whiteDistance = Math.sqrt(
-                                Math.pow(255 - r, 2) + 
-                                Math.pow(255 - g, 2) + 
-                                Math.pow(255 - b, 2)
-                            );
-                            if (whiteDistance / 441.6729559300637 <= 0.15) {
-                                isBackground = true;
-                            }
-                        } else {
-                            const blackDistance = Math.sqrt(
-                                Math.pow(r, 2) + 
-                                Math.pow(g, 2) + 
-                                Math.pow(b, 2)
-                            );
-                            if (blackDistance / 441.6729559300637 <= 0.15) {
-                                isBackground = true;
-                            }
-                        }
-                        
-                        if (isBackground) {
-                            data[j + 3] = 0;
-                        }
-                    }
-                    
-                    tempCtx.putImageData(imageData, 0, 0);
-                    ctx.drawImage(tempCanvas, 0, 0);
-                }
-                
-                resultImage.src = canvas.toDataURL('image/png');
-                resultSection.style.display = 'block';
-                invertBtn.disabled = false;
-                downloadBtn.disabled = false;
-                hideLoading();
-                showStatus(`已完成 ${images.length} 张图片处理`, 'success');
-            }, 100);
-        }
-        
-        // 切换反差色效果
-        function toggleInvertColors() {
-            if (!canvas.width || !canvas.height) return;
-            
-            showLoading(isInverted ? '正在恢复原始颜色...' : '正在添加反差色效果...');
-            
-            setTimeout(() => {
-                isInverted = !isInverted;
-                applyInvertEffect();
-                
-                invertBtn.textContent = isInverted ? '🔄 恢复' : '🔄 反差色';
-                
-                hideLoading();
-                showStatus(isInverted ? '已添加反差色' : '已恢复原色', 'success');
-            }, 100);
-        }
-        
-        // 下载结果
-        function downloadResult() {
-            const link = document.createElement('a');
-            link.download = `叠加结果-${new Date().toLocaleString().replace(/[\/\s:]/g, '-')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            showStatus('已下载结果图片', 'success');
-        }
-        
-        // 显示加载状态
-        function showLoading(message) {
-            loading.style.display = 'block';
-            statusEl.textContent = message;
-        }
-        
-        // 隐藏加载状态
-        function hideLoading() {
-            loading.style.display = 'none';
-        }
-        
-        // 显示状态消息
-        function showStatus(message, type = 'info') {
-            statusEl.textContent = message;
-            statusEl.style.backgroundColor = 'var(--light-gray)';
-            statusEl.style.color = 'var(--text-color)';
-            
-            if (type === 'error') {
-                statusEl.style.backgroundColor = '#ffebee';
-                statusEl.style.color = '#c62828';
-            } else if (type === 'success') {
-                statusEl.style.backgroundColor = '#e8f5e9';
-                statusEl.style.color = '#2e7d32';
-            }
-        }
-        
-        // 初始化应用
-        init();
     </script>
 </body>
 </html>
